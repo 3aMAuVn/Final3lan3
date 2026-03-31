@@ -1,0 +1,75 @@
+{% assign is_vi = false %}
+{% assign is_zh = false %}
+{% if page.lang == 'vi' or page.url contains '/vi/' or page.body_class contains 'page-vi' %}{% assign is_vi = true %}{% endif %}
+{% if page.lang == 'zh' or page.url contains '/cn/' or page.body_class contains 'page-cn' %}{% assign is_zh = true %}{% endif %}
+{% assign nav_key = page.nav_key | default: 'main' %}
+{% if is_vi %}{% assign nav_key = 'main_vi' %}{% endif %}
+{% if is_zh %}{% assign nav_key = 'main_cn' %}{% endif %}
+{% assign hide_lang_menu = false %}
+{% if page.url contains '/demo/' or page.body_class contains 'page-demo' %}{% assign hide_lang_menu = true %}{% endif %}
+<div class="topbar premium-topbar">
+  <div class="container topbar-inner">
+    <a class="brand" href="{% if is_vi %}{{ '/vi/' | relative_url }}{% elsif is_zh %}{{ '/cn/' | relative_url }}{% else %}{{ '/' | relative_url }}{% endif %}" aria-label="{% if is_vi %}Trang chủ {{ site.data.site.brand }}{% elsif is_zh %}{{ site.data.site.brand_zh }} 首页{% else %}{{ site.data.site.brand }} home{% endif %}">
+      <img class="brand-logo" src="{{ '/assets/logo.png' | relative_url }}" alt="{% if is_zh %}{{ site.data.site.brand_zh }} 标志{% else %}{{ site.data.site.brand }} logo{% endif %}" />
+      <div class="brand-title">
+        <b>{% if is_zh %}{{ site.data.site.brand_zh }}{% else %}{{ site.data.site.brand }}{% endif %}</b>
+        <span>{% if is_vi %}{{ site.data.site.tagline_vi }}{% elsif is_zh %}{{ site.data.site.tagline_zh }}{% else %}{{ site.data.site.tagline }}{% endif %}</span>
+      </div>
+    </a>
+
+    <div class="nav-wrap">
+      <nav class="nav premium-nav" aria-label="{% if is_vi %}Điều hướng chính{% elsif is_zh %}主导航{% else %}Primary navigation{% endif %}">
+        {% for item in site.data.navigation[nav_key] %}
+          <a href="{{ item.url | relative_url }}" class="{% if item.cta %}nav-cta{% endif %}" data-nav>{{ item.title }}</a>
+        {% endfor %}
+        <a href="{{ site.data.site.student_login }}" class="nav-login">{% if is_vi %}{{ site.data.site.student_login_label_vi }}{% elsif is_zh %}{{ site.data.site.student_login_label_zh }}{% else %}{{ site.data.site.student_login_label | default: 'Student login' }}{% endif %}</a>
+      </nav>
+
+      {% unless hide_lang_menu %}
+      <div class="lang-menu">
+        <button class="lang-btn" id="langBtn" type="button" aria-haspopup="true" aria-expanded="false" aria-label="{% if is_vi %}Chọn ngôn ngữ{% elsif is_zh %}选择语言{% else %}Choose language{% endif %}">
+          <img class="lang-btn-flag-img" id="currentLangFlag" src="{% if is_vi %}{{ '/assets/flags/vn-round.svg' | relative_url }}{% elsif is_zh %}{{ '/assets/flags/cn-round.svg' | relative_url }}{% else %}{{ '/assets/flags/en-round.svg' | relative_url }}{% endif %}" alt="{% if is_vi %}Tiếng Việt{% elsif is_zh %}中文{% else %}English{% endif %}" />
+          <span class="sr-only" id="currentLangText">{% if is_vi %}Tiếng Việt{% elsif is_zh %}中文{% else %}English{% endif %}</span>
+          <span class="lang-btn-caret">▾</span>
+        </button>
+
+        <div class="lang-dropdown" id="langDropdown" hidden>
+          <button class="lang-option" type="button" data-lang="en" data-label="En">
+            <img class="lang-flag-icon" src="{{ '/assets/flags/en-round.svg' | relative_url }}" alt="" aria-hidden="true" />
+            <span class="lang-label">En</span>
+          </button>
+
+          <button class="lang-option" type="button" data-lang="vi" data-label="Vn">
+            <img class="lang-flag-icon" src="{{ '/assets/flags/vn-round.svg' | relative_url }}" alt="" aria-hidden="true" />
+            <span class="lang-label">Vn</span>
+          </button>
+
+          <button class="lang-option" type="button" data-lang="zh" data-label="Zh">
+            <img class="lang-flag-icon" src="{{ '/assets/flags/cn-round.svg' | relative_url }}" alt="" aria-hidden="true" />
+            <span class="lang-label">中文</span>
+          </button>
+
+          <button class="lang-option" type="button" data-lang="hi" data-label="Hi">
+            <svg class="lang-flag-svg-rect" viewBox="0 0 60 40" aria-hidden="true">
+              <rect width="60" height="13.333" y="0" fill="#FF9933"/>
+              <rect width="60" height="13.333" y="13.333" fill="#FFFFFF"/>
+              <rect width="60" height="13.334" y="26.666" fill="#138808"/>
+              <circle cx="30" cy="20" r="4.2" fill="none" stroke="#000080" stroke-width="1"/>
+              <circle cx="30" cy="20" r="0.6" fill="#000080"/>
+            </svg>
+            <span class="lang-label">Hi</span>
+          </button>
+
+          <button class="lang-option" type="button" data-lang="es" data-label="Es">
+            <svg class="lang-flag-svg-rect" viewBox="0 0 60 40" aria-hidden="true">
+              <rect width="60" height="40" fill="#AA151B"/>
+              <rect y="10" width="60" height="20" fill="#F1BF00"/>
+            </svg>
+            <span class="lang-label">Es</span>
+          </button>
+        </div>
+      </div>
+      {% endunless %}
+    </div>
+  </div>
+</div>
